@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro CRUD</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/style.cc' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <main class="container-fluid bg-dark">
+        <hr class="border border-warning border-3 opacity-100">   
+        <div class="row my-5 bg-w"> 
+            <h1 class="col text-center "> <img src="{% static '/grupob.gif' %}"> </h1>
+        </div> 
+        <div class="row justify-content-md-center bg-dark">
+            <div class="col-6 row justify-content-center h-25 p-4">  
+                {% if update %}
+                <form class="w-75" method="post" action={% url "update" %}>
+                    {% csrf_token %}
+                    <div class="mb-3 bg-">
+                        <label for="subject" class="form-label">Correo</label>
+                        <input type="text" value="{{ update.subject }}" class="form-control" name="subject" id="subject" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Contraseña</label>
+                        <textarea type="text" name="description" class="form-control" id="description">{{ update.description }}</textarea>
+                    </div>
+                    <input type="hidden" name="id" value="{{ update.id }}" />
+                    <button type="submit" class="btn btn-primary btn-warning">Aceptar Cambios</button> 
+                </form>
+                {% else %}
+                <form class="w-50" method="post" action={% url "insert" %}>
+                    {% csrf_token %}
+                    <div class="mb-3 ">
+                      <label for="subject" class="form-label text-white">Correo Electronico Temporales</label>
+                      <input type="email" placeholder="Correo" class="form-control" name="subject" id="subject" aria-describedby="emailHelp">
+                      <div id="subject" class="form-label text-white">Por favor registra tus correos electronicos.</div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="description" class="form-label text-white">Contraseña</label>
+                      <input type="password" placeholder="contraseña" name="description" class="form-control" id="description">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                  </form>
+                {% endif %}
+            </div>
+            <div class="col-5 justify-content-center">
+            {% for data in db_data %}
+               <div class="row">
+                <div class="card text-dark mb-3 bg-warning w-50 col m-1">
+                    <div class="card-body">
+                        <h6 class="card-title">Correo: {{data.subject }}</h6>
+                        <h6 class="card-password">Contraseña: {{ data.description }}</h6>
+                        <a href={% url "update_form" data.id %} class="btn btn-dark">Actualizar/Modificar</a>
+                        <a href={% url "delete" data.id %} class="btn btn-danger">Eliminar</a>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
